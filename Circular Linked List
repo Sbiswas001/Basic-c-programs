@@ -1,0 +1,222 @@
+#include <stdio.h>
+#include <stdlib.h>
+struct node
+{
+    int data;
+    struct node *next;
+};
+struct node *createNode(int n)
+{
+    struct node *new = (struct node *)malloc(sizeof(struct node));
+    if (new == NULL)
+    {
+        printf("overflow\n");
+        return NULL;
+    }
+    else
+    {
+        new->data = n;
+        new->next = NULL;
+        return new;
+    }
+}
+struct node *tail = NULL;
+int count = 0; // a variable to count nodes
+
+void insertAtBeginning(int n)
+{
+    if (tail == NULL)
+    {
+        tail = createNode(n);
+        tail->next = tail;
+        count++;
+        return;
+    }
+    struct node *p = createNode(n);
+    if (p == NULL)
+    {
+        return;
+    }
+    p->next = tail->next;
+    tail->next = p;
+    count++;
+}
+void insertAtEnd(int n)
+{
+    struct node *p = createNode(n);
+    if (p == NULL)
+    {
+        return;
+    }
+    p->next = tail->next;
+    tail->next = p;
+    tail = tail->next;
+    count++;
+}
+void insertAtPos(int n, int pos)
+{
+    if (pos == 1)
+    {
+        insertAtBeginning(n);
+    }
+    if (pos == count + 1)
+    {
+        insertAtEnd(n);
+        return;
+    }
+    if (1 < pos && pos <= count)
+    {
+        struct node *p = tail->next;
+        int i;
+        for (i = 1; i < pos - 1; i++)
+        {
+            p = p->next;
+        }
+        struct node *new = createNode(n);
+        if (new == NULL)
+        {
+            return;
+        }
+        new->next = p->next;
+        p->next = new;
+        count++;
+    }
+    else
+    {
+        printf("invalid position entered\n");
+    }
+}
+
+void deleteAtBeginning()
+{
+    if (count == 0)
+    {
+        printf("underflow\n");
+        return;
+    }
+    struct node *temp = tail->next;
+    tail->next = tail->next->next;
+    free(temp);
+    count--;
+}
+void deleteAtEnd()
+{
+    if (count == 0)
+    {
+        printf("Underflow\n");
+        return;
+    }
+    struct node *p = tail->next;
+    while (p->next != tail)
+    {
+        p = p->next;
+    }
+
+    p->next = p->next->next;
+    free(tail);
+    tail = p;
+    count--;
+}
+void deleteAtPos(int pos)
+{
+    if (count == 0)
+    {
+        printf("Underflow\n");
+        return;
+    }
+    if (pos == 1)
+    {
+        deleteAtBeginning();
+        return;
+    }
+    if (pos == count)
+    {
+        deleteAtEnd();
+        return;
+    }
+    if (1 < pos && pos < count)
+    {
+        struct node *p = tail->next;
+        int i;
+        for (i = 1; i < pos - 1; i++)
+        {
+            p = p->next;
+        }
+        struct node *del = p->next;
+        p->next = p->next->next;
+        free(del);
+        count--;
+    }
+    else
+    {
+        printf("invalid position entered\n");
+    }
+}
+void display()
+{
+    if (count == 0)
+    {
+        printf("Linked list is empty\n");
+        return;
+    }
+    struct node *p = tail->next;
+    printf("Linked list: ");
+    while (p != tail)
+    {
+        printf("%d ", p->data);
+        p = p->next;
+    }
+    printf("%d\n", p->data);
+    printf("No. of elements present in linked list :%d\n", count);
+}
+int main()
+{
+    int choice, pos, n;
+    printf("Menu is shown here\n");
+    printf("1.Insert at beginning\n2.Insert at end\n3.Insert at any position\n4.Delete at beginning\n5.Delete at end\n6.Delete at position\n7.Display\n8.Exit");
+
+    while (1)
+    {
+        printf("\nEnter your choice: ");
+        scanf("%d", &choice);
+
+        switch (choice)
+        {
+        case 1:
+            printf("Enter element to insert: ");
+            scanf("%d", &n);
+            insertAtBeginning(n);
+            break;
+        case 2:
+            printf("Enter element to insert: ");
+            scanf("%d", &n);
+            insertAtEnd(n);
+            break;
+        case 3:
+            printf("Enter element to insert: ");
+            scanf("%d", &n);
+            printf("Enter position:");
+            scanf("%d", &pos);
+            insertAtPos(n, pos);
+            break;
+        case 4:
+            deleteAtBeginning();
+            break;
+        case 5:
+            deleteAtEnd();
+            break;
+        case 6:
+            printf("Enter position:");
+            scanf("%d", &pos);
+            deleteAtPos(pos);
+            break;
+        case 7:
+            display();
+            break;
+        case 8:
+            return 0;
+        default:
+            printf("Invalid input,try again\n");
+        }
+    }
+}
