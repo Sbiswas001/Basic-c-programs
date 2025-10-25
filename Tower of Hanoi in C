@@ -1,0 +1,15 @@
+#include <stdio.h>
+void tower(int n,char first,char middle,char end){
+  if(n == 0)return;
+  tower(n - 1,first,end,middle);
+  printf("%c-->%c\n",first,end);
+  tower(n-1,middle,first,end);
+  return;
+}
+int main() {
+  int n;
+  printf("enter number of disks:");
+  scanf("%d",&n);
+  tower(n,'A','B','C');
+  return 0;
+}
