@@ -1,4 +1,4 @@
-/*program in java*/
+
 b/* Description: Checks whether a given number is prime */
 
 #include <stdio.h>
